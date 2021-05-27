@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import plotly.io as pio
 pd.options.plotting.backend="plotly"
 
 def p2f(value):
@@ -85,18 +86,18 @@ if __name__ =="__main__":
     Tangent_HAS_weight = Port_df.loc[Port_df['Sharpe_S&P500_HAS'] == SP_HAS_Peak_Sharpe, 'S&P500 weight'].values[0]
 
     # Generating scatter plot
-    trace1 = go.Scatter(x=Port_df['SD_S&P500_RJR'], y=Port_df['ER_S&P500_RJR'],name='S&P500 & RJR',mode='markers')
-                        # ,hovertext=list(Port_df['S&P500 weight']))
-    trace2 = go.Scatter(x=Port_df['SD_S&P500_HAS'], y=Port_df['ER_S&P500_HAS'],name='S&P500 & HAS',mode='markers')
-                        # ,hovertext=list(Port_df['S&P500 weight']))
+    trace1 = go.Scatter(x=Port_df['SD_S&P500_RJR'], y=Port_df['ER_S&P500_RJR'],name='S&P500 & RJR',mode='markers'
+                         ,hovertext=list(Port_df['S&P500 weight']))
+    trace2 = go.Scatter(x=Port_df['SD_S&P500_HAS'], y=Port_df['ER_S&P500_HAS'],name='S&P500 & HAS',mode='markers'
+                         ,hovertext=list(Port_df['S&P500 weight']))
 
     trace3 = go.Scatter(x=[0,Tangent_RJR_SD,10],y=[RiskFree.average_return,Tangent_RJR_ER,10*np.max(Port_df['Sharpe_S&P500_RJR'])+RiskFree.average_return],
-                        mode='markers+lines',name='CML S&P500 & RJR')
-    # ,text=["Risk-Free Investment","Tangent Portfolio"])
+                        mode='markers+lines',name='CML S&P500 & RJR'
+     ,text=["Risk-Free Investment","Tangent Portfolio"])
 
     trace4 = go.Scatter(x=[0, Tangent_HAS_SD,10], y=[RiskFree.average_return, Tangent_HAS_ER,10*np.max(Port_df['Sharpe_S&P500_HAS'])+RiskFree.average_return],
-                        mode='markers+lines', name='CML S&P500 & HAS')
-    # ,text=["","Tangent Portfolio"])
+                        mode='markers+lines', name='CML S&P500 & HAS'
+     ,text=["","Tangent Portfolio"])
 
     trace5 = go.Table(
         header=dict(values=['<b>Reference</b>','<b>Name</b>','<b>Expected Revenue [%]</b>','<b>Standard Deviation [%]</b>','<b>Sharpe Ratio</b>']),
@@ -116,8 +117,8 @@ if __name__ =="__main__":
 
     data=[trace1,trace2,trace3,trace4,trace5]
 
-    layout = go.Layout(title={'text': "<b>Portfolio Efficiency Comparison</b>", 'y': 0.95, 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top'}, xaxis = dict(title='Volatility (Standard Deviation) %'), yaxis=dict(title='Expected Return %'))
-                       # ,hovermode="x")
+    layout = go.Layout(title={'text': "<b>Portfolio Efficiency Comparison</b>", 'y': 0.95, 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top'}, xaxis = dict(title='Volatility (Standard Deviation) %'), yaxis=dict(title='Expected Return %')
+                        ,hovermode="x")
 
     fig = go.Figure(data=data,layout=layout)
 
@@ -140,8 +141,8 @@ if __name__ =="__main__":
     # For static image, add
     # config=config)
 
+    pio.write_html(fig,file=r'C:\Users\npk50\Desktop\Alex_Sharpe.html',auto_open=True)
+
     # Export dataframe to Excel
     # export_file=r'C:\Users\npk50\Desktop\Alex_Sharpe.xlsx'
     # Port_df.to_excel(export_file)
-
-
